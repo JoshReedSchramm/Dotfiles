@@ -1,0 +1,17 @@
+# Unix
+alias tlf='tail -f'
+alias tlfn='tail -f -n 1000'
+alias mkdir='mkdir -p'
+alias ...='../..'
+alias l=ls
+alias e='$EDITOR'
+
+# Bundler
+alias b='bundle'
+
+# Rails
+alias migrate="rake db:migrate db:rollback && rake db:migrate"
+alias m="migrate"
+alias s="rspec"
+
+[[ -f ~/.aliases.local ]] && source ~/.aliases.local

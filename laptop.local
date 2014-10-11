@@ -1,0 +1,25 @@
+#!/bin/sh
+
+brew tap caskroom/cask
+brew install caskroom/cask/brew-cask
+
+brew cask install dropbox
+brew cask install google-chrome
+brew cask install firefox
+brew cask install iterm2
+brew cask install adobe-creative-cloud
+brew cask install google-drive
+brew cask install android-studio
+brew cask install arq
+brew cask install eclipse-java
+brew cask install virtualbox
+brew cask install vagrant
+
+if [ ! -d ~/.ssh ];
+then
+  if [ -L ~/.ssh ];
+  then
+    rm ~/.ssh
+  fi
+  ln -s ~/Dropbox/ssh ~/.ssh
+fi
