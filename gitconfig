@@ -26,3 +26,6 @@
   template = ~/.gitmessage
 [fetch]
   prune = true
+[user]
+	name = Josh Schramm
+	email = josh.schramm@gmail.com

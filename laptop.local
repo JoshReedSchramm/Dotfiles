@@ -23,6 +23,3 @@ then
   fi
   ln -s ~/Dropbox/ssh ~/.ssh
 fi
-
-git config --global user.name "Josh Schramm"
-git config --global user.email "josh.schramm@gmail.com
