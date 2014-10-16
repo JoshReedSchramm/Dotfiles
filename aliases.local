@@ -1,2 +1,6 @@
 alias proj="~/Projects"
 alias spec="rspec"
+alias smongo="mongod --fork --config /usr/local/etc/mongod.conf"
+alias kmongo="mongo admin --eval 'db.shutdownServer();'"
+alias smysql="mysql.server start"
+alias kmysql="mysql.server stop"
