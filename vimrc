@@ -152,6 +152,22 @@ set spellfile=$HOME/Dropbox/.vim-spell-en.utf-8.add
 
 " Always use vertical diffs
 " set diffopt+=vertical
+"
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" OPEN FILES IN DIRECTORY OF CURRENT FILE
+ """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
+" Derived from Joe Fiorini and Gary Bernhardt's dotfiles
+cnoremap %% <C-R>=expand('%:p:h').'/'<cr>
+map <leader>e :edit %%
+map <leader>v :view %%
+map <leader>a :tabe %%
+map <leader>n :Rename %%
+map <leader>k :!mkdir -p %%
+
+"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+" toggle paste mode with leader v
+ """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+imap <leader>v <C-O>:set paste<CR><C-r>*<C-O>:set nopaste<CR>
 
 " Local config
 if filereadable($HOME . "/.vimrc.local")
