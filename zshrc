@@ -100,8 +100,12 @@ bindkey -s "^T" "^[Isudo ^[A" # "t" for "toughguy"
 [[ -f ~/.zshrc.local ]] && source ~/.zshrc.local
 
 export PATH="$HOME/.bin:$PATH"
-
 export PATH="$PATH:/usr/local/lib/node_modules"
+export PATH="$PATH:$HOME/.composer/vendor/bin"
+
 source $(brew --prefix nvm)/nvm.sh
+export ANDROID_HOME=/usr/local/opt/android-sdk
 
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && . "$HOME/.rvm/scripts/rvm" 
+
+export PATH="$PATH:$HOME/.rvm/bin" # Add RVM to PATH for scripting
