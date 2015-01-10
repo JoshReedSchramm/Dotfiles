@@ -165,10 +165,13 @@ map <leader>n :Rename %%
 map <leader>k :!mkdir -p %%
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" toggle paste mode with leader v
+" unbind the help key which drives me insane
  """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+:nmap <F1> :echo<CR>
+:imap <F1> <C-o>:echo<CR>
 
 " Local config
 if filereadable($HOME . "/.vimrc.local")
   source ~/.vimrc.local
 endif
+
