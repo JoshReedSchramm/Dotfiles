@@ -6,6 +6,10 @@ alias ...='../..'
 alias l=ls
 alias e='$EDITOR'
 
+# Navigator Installer
+alias navbuild='builder build navigator.xml linux-x64'
+alias gonav='bundle exec boss go server --number=1 --config=Bossfile'
+
 # Bundler
 alias b='bundle'
 

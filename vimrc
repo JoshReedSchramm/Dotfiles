@@ -39,9 +39,9 @@ augroup vimrcEx
     \   exe "normal g`\"" |
     \ endif
 
-  " Cucumber navigation commands
-  autocmd User Rails Rnavcommand step features/step_definitions -glob=**/* -suffix=_steps.rb
-  autocmd User Rails Rnavcommand config config -glob=**/* -suffix=.rb -default=routes
+  " " Cucumber navigation commands
+  " autocmd User Rails Rnavcommand step features/step_definitions -glob=**/* -suffix=_steps.rb
+  " autocmd User Rails Rnavcommand config config -glob=**/* -suffix=.rb -default=routes
 
   " Set syntax highlighting for specific file types
   autocmd BufRead,BufNewFile Appraisals set filetype=ruby
@@ -49,9 +49,6 @@ augroup vimrcEx
 
   " Enable spellchecking for Markdown
   autocmd FileType markdown setlocal spell
-
-  " Automatically wrap at 80 characters for Markdown
-  autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
   " Allow stylesheets to autocomplete hyphenated words
   autocmd FileType css,scss,sass setlocal iskeyword+=-
@@ -62,9 +59,6 @@ set tabstop=2
 set shiftwidth=2
 set shiftround
 set expandtab
-
-" Display extra whitespace
-" set list listchars=tab:»·,trail:·
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -77,15 +71,6 @@ if executable('ag')
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
 endif
-
-" Color scheme
-" colorscheme github
-" highlight NonText guibg=#060606
-" highlight Folded  guibg=#0A0A0A guifg=#9090D0
-
-" Make it obvious where 80 characters is
-set textwidth=80
-"set colorcolumn=+1
 
 " Numbers
 set number
@@ -125,9 +110,7 @@ nnoremap <Down> :echoe "Use j"<CR>
 nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
 nnoremap <Leader>s :call RunNearestSpec()<CR>
 nnoremap <Leader>l :call RunLastSpec()<CR>
-
-" Run commands that require an interactive shell
-nnoremap <Leader>r :RunInInteractiveShell<space>
+nnoremap <Leader>at :call RunAllSpecs()<CR>
 
 " Treat <li> and <p> tags like the block tags they are
 let g:html_indent_tags = 'li\|p'
@@ -170,8 +153,21 @@ map <leader>k :!mkdir -p %%
 :nmap <F1> :echo<CR>
 :imap <F1> <C-o>:echo<CR>
 
-" Local config
-if filereadable($HOME . "/.vimrc.local")
-  source ~/.vimrc.local
-endif
+""""""""""""""""""""
+" NERDTree Config  "
+" """"""""""""""""""
+
+" auto-open NERDTree when vim is opened without a specific file
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+
+" Map Ctrl+N to hide/show nerdtree
+map <C-n> :NERDTreeToggle<CR>
+
+" Auto-close vim if the only window open is NERDTree
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+
+" OLD STUFF I MIGHT NOT NEED ANYMORE
+" Run commands that require an interactive shell
+" nnoremap <Leader>r :RunInInteractiveShell<space>
 
