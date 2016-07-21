@@ -1,3 +1,5 @@
+imap jk <ESC>
+
 " Use Vim settings, rather then Vi settings. This setting must be as early as
 " possible, as it has side effects.
 set nocompatible
@@ -45,6 +47,7 @@ augroup vimrcEx
 
   " Set syntax highlighting for specific file types
   autocmd BufRead,BufNewFile Appraisals set filetype=ruby
+  autocmd BufRead,BufNewFile *.pdf.erb set filetype=html
   autocmd BufRead,BufNewFile *.md set filetype=markdown
 
   " Enable spellchecking for Markdown
@@ -158,8 +161,8 @@ map <leader>k :!mkdir -p %%
 " """"""""""""""""""
 
 " auto-open NERDTree when vim is opened without a specific file
-autocmd StdinReadPre * let s:std_in=1
-autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" autocmd StdinReadPre * let s:std_in=1
+" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 
 " Map Ctrl+N to hide/show nerdtree
 map <C-n> :NERDTreeToggle<CR>
@@ -170,4 +173,3 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isT
 " OLD STUFF I MIGHT NOT NEED ANYMORE
 " Run commands that require an interactive shell
 " nnoremap <Leader>r :RunInInteractiveShell<space>
-
