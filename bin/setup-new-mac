@@ -1,0 +1,111 @@
+#!/usr/bin/env bash
+
+set -e
+
+# Create symlinks from iCloud to home directory
+cd "$HOME"
+[ ! -L icloud-drive ] && ln -s "$HOME/Library/Mobile Documents/com~apple~CloudDocs" icloud-drive
+[ ! -L lolbrary ] && ln -s "$HOME/Library" lolbrary
+
+for link in aliases bash_profile bashrc gemrc gitconfig gitignore npmrc psqlrc rvmrc vimrc zshenv zshrc aws git_template ngrok2 bin vscode; do
+  if [ -L "$HOME/.$link" ]; then
+    echo "Link '$link' already exists"
+  else
+    ln -s "icloud-drive/dotfiles/.$link" .
+  fi
+done
+
+# Shush MOTD
+touch "$HOME/.hushlogin"
+
+# Prevent macOS from restoring terminal
+touch "$HOME/.bash_sessions_disable"
+
+## link .ssh config
+mkdir -p "$HOME/.ssh"
+cd "$HOME/.ssh"
+[ ! -L config ] && ln -s ../icloud-drive/dotfiles/.ssh/config .
+cd ..
+
+# Clone oh-my-zsh into folder and resource zshrc
+git clone https://github.com/ohmyzsh/ohmyzsh.git ~/.zsh
+source ~/.zshrc
+
+# Set macOS default hidden settings
+
+## Disabling shadows on windows when taking screenshots - requires killall SystemUIServer
+defaults write com.apple.screencapture disable-shadow -bool true
+## allow disabling inline video in safari http://www.kirkville.com/stop-auto-play-videos-from-annoying-you-in-your-browser/
+defaults write com.apple.Safari WebKitMediaPlaybackAllowsInline -bool false
+defaults write com.apple.Safari com.apple.Safari.ContentPageGroupIdentifier.WebKit2AllowsInlineMediaPlayback -bool false
+
+# Install things
+if command -v brew; then
+  echo "Homebrew installed; updating:"
+  brew update
+else
+  /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
+  eval $(/opt/homebrew/bin/brew shellenv)
+fi
+
+# Brew installations
+brew tap heroku/brew
+brew tap universal-ctags/universal-ctags
+for pkg in vim git postgresql wget tree jq heroku yarn ag ripgrep gpg; do
+  if brew list -1 | grep -q "^${pkg}\$"; then
+    echo "Package '$pkg' is installed; updating:"
+    brew upgrade "$pkg" && brew cleanup "$pkg" || true
+  else
+    brew install "$pkg"
+  fi
+done
+
+# Install rvm
+if command -v rvm; then
+  echo "RVM installed; updating:"
+  rvm get HEAD
+else
+  curl -sSL https://get.rvm.io | bash
+fi
+
+# Install nvm
+if command -v nvm; then
+  echo "NVM installed; updating:"
+fi
+
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.38.0/install.sh | bash
+
+# Start postgres
+brew services start postgres
+createdb "$(whoami)"
+
+if brew list -1 | grep -q "^universal-ctags\$"; then
+  echo "Package 'universal-ctags' is installed; updating:"
+  brew upgrade bash-completion || true
+else
+  brew install --HEAD universal-ctags
+fi
+
+## Set up node
+NODE_VERSION="14.15.4"
+if [ -d "~/.nvm/versions/node/$NODE_VERSION" ]; then
+  echo "Node $NODE_VERSION already installed"
+else
+  nvm install "$NODE_VERSION"
+fi
+
+## Set up ruby
+RUBY_VERSION="ruby-3.0.1"
+if [ -d "~/.rvm/rubies/$RUBY_VERSION" ]; then
+  echo "Ruby $RUBY_VERSION already installed"
+else
+  rvm install "$RUBY_VERSION"
+fi
+rvm use $RUBY_VERSION --default
+gem install bundler
+
+# Run profile
+source .profile
+
+echo "SETUP Complete"
+echo "Don't forget to put credentials in npmrc, aws/credentials and ngrok.yml"

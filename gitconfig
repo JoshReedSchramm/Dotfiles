@@ -1,9 +1,12 @@
 [init]
 	templatedir = ~/.git_template
+	defaultBranch = main
 [push]
   default = current
-[color]
-  ui=auto
+[core]
+  excludesfile = ~/.gitignore
+  autocrlf = input
+	editor = code --wait
 [alias]
   aa = add --all
   ap = add --patch
@@ -18,6 +21,10 @@
   st = status
   up = !git fetch origin && git rebase origin/master
   undo=reset --soft 'HEAD^'
+[pager]
+	branch = false
+[pull]
+	ff = only
 [core]
   excludesfile = ~/.gitignore
   autocrlf = input
@@ -30,15 +37,3 @@
 [user]
 	name = Josh Schramm
 	email = josh.schramm@gmail.com
-[difftool "Kaleidoscope"]
-  cmd = ksdiff --partial-changeset --relative-path \"$MERGED\" -- \"$LOCAL\" \"$REMOTE\"
-[difftool]
-  prompt = false
-[diff]
-  tool = Kaleidoscope
-[mergetool "Kaleidoscope"]
-  cmd = ksdiff --merge --output \"$MERGED\" --base \"$BASE\" -- \"$LOCAL\" \"$REMOTE\"
-[mergetool]
-  prompt = false
-[merge]
-  tool = Kaleidoscope

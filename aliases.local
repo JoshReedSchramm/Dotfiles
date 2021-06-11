@@ -1,4 +1,0 @@
-alias proj="~/Projects"
-alias spec="rspec"
-alias smysql="mysql.server start"
-alias kmysql="mysql.server stop"

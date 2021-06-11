@@ -1,5 +1,3 @@
-imap jk <ESC>
-
 " Use Vim settings, rather then Vi settings. This setting must be as early as
 " possible, as it has side effects.
 set nocompatible
@@ -10,22 +8,29 @@ let mapleader = " "
 set backspace=2   " Backspace deletes like most programs in insert mode
 set nobackup
 set nowritebackup
-set noswapfile    " http://robots.thoughtbot.com/post/18739402579/global-gitignore#comment-458413287
+set noswapfile
 set history=100
 set ruler         " show the cursor position all the time
 set showcmd       " display incomplete commands
 set incsearch     " do incremental searching
 set laststatus=2  " Always display the status line
 set autowrite     " Automatically :write before running commands
+set tabstop=2
+set shiftwidth=2
+set shiftround
+set expandtab
+set number
+set numberwidth=5
+" Open new split panes to right and bottom, which feels more natural
+set splitbelow
+set splitright
+set showmatch
+set matchtime=3
 
 " Switch syntax highlighting on, when the terminal has colors
 " Also switch on highlighting the last used search pattern.
 if (&t_Co > 2 || has("gui_running")) && !exists("syntax_on")
   syntax on
-endif
-
-if filereadable(expand("~/.vimrc.bundles"))
-  source ~/.vimrc.bundles
 endif
 
 filetype plugin indent on
@@ -41,27 +46,14 @@ augroup vimrcEx
     \   exe "normal g`\"" |
     \ endif
 
-  " " Cucumber navigation commands
-  " autocmd User Rails Rnavcommand step features/step_definitions -glob=**/* -suffix=_steps.rb
-  " autocmd User Rails Rnavcommand config config -glob=**/* -suffix=.rb -default=routes
-
   " Set syntax highlighting for specific file types
   autocmd BufRead,BufNewFile Appraisals set filetype=ruby
   autocmd BufRead,BufNewFile *.pdf.erb set filetype=html
   autocmd BufRead,BufNewFile *.md set filetype=markdown
 
-  " Enable spellchecking for Markdown
-  autocmd FileType markdown setlocal spell
-
   " Allow stylesheets to autocomplete hyphenated words
   autocmd FileType css,scss,sass setlocal iskeyword+=-
 augroup END
-
-" Softtabs, 2 spaces
-set tabstop=2
-set shiftwidth=2
-set shiftround
-set expandtab
 
 " Use The Silver Searcher https://github.com/ggreer/the_silver_searcher
 if executable('ag')
@@ -74,10 +66,6 @@ if executable('ag')
   " ag is fast enough that CtrlP doesn't need to cache
   let g:ctrlp_use_caching = 0
 endif
-
-" Numbers
-set number
-set numberwidth=5
 
 " Tab completion
 " will insert tab at beginning of line,
@@ -103,12 +91,6 @@ map <Leader>ct :!ctags -R .<CR>
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
 
-" Get off my lawn
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-nnoremap <Up> :echoe "Use k"<CR>
-nnoremap <Down> :echoe "Use j"<CR>
-
 " vim-rspec mappings
 nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
 nnoremap <Leader>s :call RunNearestSpec()<CR>
@@ -118,31 +100,13 @@ nnoremap <Leader>at :call RunAllSpecs()<CR>
 " Treat <li> and <p> tags like the block tags they are
 let g:html_indent_tags = 'li\|p'
 
-" Open new split panes to right and bottom, which feels more natural
-set splitbelow
-set splitright
-
 " Quicker window movement
 nnoremap <C-j> <C-w>j
 nnoremap <C-k> <C-w>k
 nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
-" configure syntastic syntax checking to check on open as well as save
-let g:syntastic_check_on_open=1
-let g:syntastic_html_tidy_ignore_errors=[" proprietary attribute \"ng-"]
-
-" Set spellfile to location that is guaranteed to exist, can be symlinked to
-" Dropbox or kept in Git and managed outside of dotfiles using rcm.
-set spellfile=$HOME/Dropbox/.vim-spell-en.utf-8.add
-
-" Always use vertical diffs
-" set diffopt+=vertical
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" OPEN FILES IN DIRECTORY OF CURRENT FILE
- """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""" 
-" Derived from Joe Fiorini and Gary Bernhardt's dotfiles
+" Open files in directory of current file
 cnoremap %% <C-R>=expand('%:p:h').'/'<cr>
 map <leader>e :edit %%
 map <leader>ew :edit %%
@@ -150,31 +114,40 @@ map <leader>a :tabe %%
 map <leader>n :Rename %%
 map <leader>k :!mkdir -p %%
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " unbind the help key which drives me insane
- """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 :nmap <F1> :echo<CR>
 :imap <F1> <C-o>:echo<CR>
 
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 " Bind pastetoggle so code can be pasted
- """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 set pastetoggle=<F2>
 
-""""""""""""""""""""
-" NERDTree Config  "
-" """"""""""""""""""
+" Quick command to replace ' with " for Rubocop cleanup
+map <leader>rq :%s/'/"/gc<cr>
 
-" auto-open NERDTree when vim is opened without a specific file
-" autocmd StdinReadPre * let s:std_in=1
-" autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+packadd minpac
+call minpac#init()
 
-" Map Ctrl+N to hide/show nerdtree
-map <C-n> :NERDTreeToggle<CR>
+call minpac#add('k-takata/minpac', {'type': 'opt'})
+call minpac#add('jlanzarotta/bufexplorer')
+call minpac#add('scrooloose/syntastic')
+call minpac#add('thoughtbot/vim-rspec')
+call minpac#add('tpope/vim-endwise')
+call minpac#add('tpope/vim-surround')
+call minpac#add('junegunn/fzf')
+call minpac#add('junegunn/fzf.vim')
+call minpac#add('vim-ruby/vim-ruby')
+call minpac#add('scrooloose/nerdcommenter')
 
-" Auto-close vim if the only window open is NERDTree
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NERDTree.isTabTree()) | q | endif
+" configure syntastic syntax checking to check on open as well as save
+let g:syntastic_check_on_open=1
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
 
-" OLD STUFF I MIGHT NOT NEED ANYMORE
-" Run commands that require an interactive shell
-" nnoremap <Leader>r :RunInInteractiveShell<space>
+" Map fzf to work like CtrlP
+map ; :GFiles<CR>
+
+" Set spellfile to location that is guaranteed to exist, can be symlinked to
+" Dropbox or kept in Git and managed outside of dotfiles using rcm.
+set spellfile=$HOME/Dropbox/.vim-spell-en.utf-8.add

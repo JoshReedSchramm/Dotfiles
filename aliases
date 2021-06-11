@@ -6,16 +6,28 @@ alias ...='../..'
 alias l=ls
 alias e='$EDITOR'
 
-# Navigator Installer
-alias navbuild='builder build navigator.xml linux-x64'
-alias gonav='bundle exec boss go server --number=1 --config=Bossfile'
+# Ruby Helpers
+alias rbcp="git ls-files -m | xargs ls -1 2>/dev/null | grep '\.rb$' | xargs rubocop"
 
 # Bundler
 alias b='bundle'
+alias be='bundle exec'
 
 # Rails
 alias migrate="rake db:migrate db:rollback && rake db:migrate"
 alias m="migrate"
 alias s="rspec"
+alias spec="rspec"
+alias rup="yarn install && bundle install && rake db:migrate && rake db:test:prepare && git checkout db/schema.rb"
 
-[[ -f ~/.aliases.local ]] && source ~/.aliases.local
+# Projects
+alias proj="cd ~/Projects"
+#   Removes all git branches other than main and develop
+alias grmold="git branch | grep -v '^[ *]*main$' | grep -v '^[ *]*develop$' | xargs git branch -D"
+
+# Silver Surfer
+alias ag="ag --path-to-ignore ~/.ignore"
+
+# Git
+alias s="git status"
+alias gd="git branch -D"
